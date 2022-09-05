@@ -57,3 +57,7 @@ h3 {
 p {
     font-size: 24px;
 }
+
+.error-notice {
+    border-radius: 10px;
+}
