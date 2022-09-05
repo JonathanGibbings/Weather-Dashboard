@@ -30,6 +30,11 @@ h3 {
 
 .search-btn {
     background-color: var(--searchColor);
+    border-radius: 10px;
+    font-size: 24px;
+}
+
+.search-box {
     font-size: 24px;
 }
 
