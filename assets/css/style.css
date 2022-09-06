@@ -87,6 +87,10 @@ h3 {
     color: white;
 }
 
+.card img {
+    max-width: 50px;
+}
+
 .card h4 {
     font-size: 32px;
 }

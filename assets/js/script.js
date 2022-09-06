@@ -93,64 +93,35 @@ var createWeatherDash = function(forecast, city) {
 };
 
 var createFiveDay = function(forecast) {
-    // <div class="row">
-    //     <h2 class="col-12 p-3">5-Day Forecast:</h2>
-    //     <div class="col">
-    //         <ul class="card m-1 p-3">
-    //             <li>
-    //                 <h3>9/4/2022</h3>
-    //             </li>
-    //             <li>
-    //                 <p>🌧️</p>
-    //             </li>
-    //             <li>
-    //                 <p>Temp: 74.01 °F</p>
-    //             </li>
-    //             <li>
-    //                 <p>Wind: 8.22 MPH</p>
-    //             </li>
-    //             <li>
-    //                 <p>Humidity: 22%</p>
-    //             </li>
-    //         </ul>
-    //     </div>
-    //     <div class="col">
-    //         <ul class="card m-1 p-3">
-    //             <li>
-    //                 <h3>9/5/2022</h3>
-    //             </li>
-    //             <li>
-    //                 <p>🌧️</p>
-    //             </li>
-    //             <li>
-    //                 <p>Temp: 74.01 °F</p>
-    //             </li>
-    //             <li>
-    //                 <p>Wind: 8.22 MPH</p>
-    //             </li>
-    //             <li>
-    //                 <p>Humidity: 22%</p>
-    //             </li>
-    //         </ul>
-    //     </div>
-    // </div>
-    // box to hold the 5 day cards
+    // card group to hold the 5 day cards
     var fiveDayBox = $("<div>")
-        .addClass("row")
+        .addClass("card-group")
     var titleEl = $("<h2>")
         .addClass("col-12 p-3")
         .text("5-Day Forecast:");
     fiveDayBox.append(titleEl);
-    for (var i = 0; i < 5; i++) {
+    // loops to create a card for each day
+    for (var i = 1; i < 6; i++) {
+        // card to hold forecast
+        var cardEl = $("<div>")
+            .addClass("card m-1 p-2");
+        // list for formatting purposes
         var listBox = $("<ul>")
-            .addClass("list-group col card m-1 p3");
+            .addClass("list-group");
+        // data including date, icon. temp, wind, humidity
         var DateEl = $("<h3>")
             .text(moment.unix(forecast.daily[i].dt).format("M/D/YYYY"))
-        var tempEl = $("<li>").text("Temp: " + forecast.daily[i].temp.day + " °F")
-        var windEl = $("<li>").text("Wind: " + forecast.daily[i].wind_speed + " MPH")
-        var humidityEl = $("<li>").text("Humidity: " + forecast.daily[i].humidity + "%")
-        listBox.append(DateEl, tempEl, windEl, humidityEl);
-        fiveDayBox.append(listBox);
+            .addClass("card-title");
+        var icon = $("<img>")
+            .attr("src", "http://openweathermap.org/img/w/" + forecast.daily[i].weather[0].icon + ".png")
+            .attr("alt", "Icon for future weather.")
+        var tempEl = $("<li>").text("Temp: " + forecast.daily[i].temp.day + " °F");
+        var windEl = $("<li>").text("Wind: " + forecast.daily[i].wind_speed + " MPH");
+        var humidityEl = $("<li>").text("Humidity: " + forecast.daily[i].humidity + "%");
+        // append list items to list then list to card then card to card group
+        listBox.append(DateEl, icon, tempEl, windEl, humidityEl);
+        cardEl.append(listBox);
+        fiveDayBox.append(cardEl);
     }
     $("#right-column").append(fiveDayBox);
 };
