@@ -13,10 +13,28 @@ THEN I am again presented with current and future conditions for that city */
 
 // holds array of previous searches
 var searchHistory = [];
-// loads search history from local storage into array
-var loadSearchHistory = function() {};
-// dynamically creates buttons from search history
-var showSearchHistory = function() {};
+// loads search history from local storage into array and displays it
+var loadSearchHistory = function() {
+    var savedHistory = localStorage.getItem("citySearchHistory");
+    if (!savedHistory) {
+        return false;
+    }
+    savedHistory = JSON.parse(savedHistory);
+    for (var i = 0; i < savedHistory.length; i++) {
+        searchHistory.push(savedHistory[i]);
+    }
+    console.log(searchHistory);
+};
+// saves search history to local storage
+var saveSearchHistory = function(city) {
+    if (!searchHistory.includes(city)) {
+        // add city to array for saving
+        searchHistory.push(city);
+        // clears form
+        $("input").first().val("");
+        localStorage.setItem("citySearchHistory", JSON.stringify(searchHistory));
+    }
+};
 
 // passes city name to get lat/long
 var cityToGeoPosit = function(city) {
@@ -30,8 +48,11 @@ var cityToGeoPosit = function(city) {
                     getWeather(latLon, city);
                 });
             } else {
-                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("Location Error Code: " + data.cod);
+                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger m-2 p-2").text("Location Error Code: " + data.cod);
                 $("#search-form").append(errorEl);
+                setTimeout(function() {
+                    $(".error-notice").remove();
+                }, 3000);
             }
         })
 };
@@ -45,14 +66,23 @@ var getWeather = function(geoPosit, city) {
             if (response.ok) {
                 response.json().then(function(data) {
                     console.log(data);
+                    clearDash();
                     createWeatherDash(data, city);
                     createFiveDay(data);
                 });
             } else {
-                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("Weather Error Code: " + data.cod);
+                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2 m-2").text("Weather Error Code: " + data.cod);
                 $("#search-form").append(errorEl);
+                setTimeout(function() {
+                    $(".error-notice").remove();
+                }, 3000);
             }
         })
+};
+
+// clears previous forecast
+var clearDash = function() {
+    $("#right-column").html("");
 };
 
 // parses weather object into dynamic elements
@@ -130,17 +160,29 @@ var createFiveDay = function(forecast) {
 $("#search-form").submit(function(event) {
     event.preventDefault();
     var cityName = $("input").first().val().trim();
+
     if (cityName) {
+        // formats city name
+        cityName = cityName.split(" ");
+        for (var i = 0; i < cityName.length; i++) {
+            cityName[i] = cityName[i][0].toUpperCase() + cityName[i].substr(1).toLowerCase();
+        }
+        cityName = cityName.join(" ");
+        // saves city name
+        saveSearchHistory(cityName);
+        // sends city to get data back
         cityToGeoPosit(cityName);
-        searchHistory.push(cityName);
-        $("input").first().val("");
     } else {
-        console.log("need input")
+        var errorEl = $("<p>").addClass("error-notice col-9 bg-danger m-2 p-2").text("Error: No Input");
+        $("#search-form").append(errorEl);
+        setTimeout(function() {
+            $(".error-notice").remove();
+        }, 3000);
     }
 });
 
 // on click send city name from button from searchHistory
-$("").on("click", "button", function() {});
+$(".city-btn").on("click", "button", function() {});
 
-// loadSearchHistory();
+loadSearchHistory();
 
