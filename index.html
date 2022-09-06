@@ -11,136 +11,37 @@
     <link rel="stylesheet" href="./assets/css/style.css"/>
     <title>Weather Dashboard</title>
 </head>
-<body class="row">
+<body class="row align-items-start">
     <header class="col-12 p-4 text-white">
         <h1 class="text-center font-weight-bold">Weather Dashboard</h1>
     </header>
 
     <!-- left column -->
-    <div class="row col-12 col-lg-3 text-center mt-4">
+    <div class="row col-12 col-lg-3 justify-content-center align-items-start text-center mt-4">
         <!-- search form section -->
         <div class="col-6 col-lg-12">
             <h2>Search for a City:</h2>
-            <form id="search-form" class="row justify-content-center">
-                <input name="search-box" id="search-box" type="text" class="search-box col-9 m-2"><br>
+            <form id="search-form" >
+                <input name="search-box" id="search-box" type="text" class="search-box col-9 m-2">
                 <button type="submit" class="col-9 btn search-btn m-2 text-white">Search</button>
             </form>
-            <hr class="border-dark ml-1">
+        </div>
+
+        <!-- dynamically created buttons -->
+        <div class="col-6 col-lg-12 row justify-content-center">
+            <hr class="col-9 border-dark m-2">
             <button class="col-9 btn city-btn m-2">Durham</button>
             <button class="col-9 btn city-btn m-2">Raleigh</button>
             <button class="col-9 btn city-btn m-2">Carrboro</button>
             <button class="col-9 btn city-btn m-2">Chapel Hill</button>
             <button class="col-9 btn city-btn m-2">Virginia Beach</button>
         </div>
-
-        <!-- dynamically created buttons -->
-        <div class="col-6 col-lg-12 row justify-content-center">
-
-        </div>
     </div>
     <!-- end left column -->
 
         <!-- right column -->
         <div  id="right-column" class="col-12 col-lg-9 mt-4">
-  
-            <div class="row">
-                <h2 class="col-12 p-3">5-Day Forecast:</h2>
-                <div class="col">
-                    <ul class="card m-1 p-3">
-                        <li>
-                            <h3>9/4/2022</h3>
-                        </li>
-                        <li>
-                            <p>🌧️</p>
-                        </li>
-                        <li>
-                            <p>Temp: 74.01 °F</p>
-                        </li>
-                        <li>
-                            <p>Wind: 8.22 MPH</p>
-                        </li>
-                        <li>
-                            <p>Humidity: 22%</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col">
-                    <ul class="card m-1 p-3">
-                        <li>
-                            <h3>9/5/2022</h3>
-                        </li>
-                        <li>
-                            <p>🌧️</p>
-                        </li>
-                        <li>
-                            <p>Temp: 74.01 °F</p>
-                        </li>
-                        <li>
-                            <p>Wind: 8.22 MPH</p>
-                        </li>
-                        <li>
-                            <p>Humidity: 22%</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col">
-                    <ul class="card m-1 p-3">
-                        <li>
-                            <h3>9/6/2022</h3>
-                        </li>
-                        <li>
-                            <p>🌧️</p>
-                        </li>
-                        <li>
-                            <p>Temp: 74.01 °F</p>
-                        </li>
-                        <li>
-                            <p>Wind: 8.22 MPH</p>
-                        </li>
-                        <li>
-                            <p>Humidity: 22%</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col">
-                    <ul class="card m-1 p-3">
-                        <li>
-                            <h3>9/7/2022</h3>
-                        </li>
-                        <li>
-                            <p>🌧️</p>
-                        </li>
-                        <li>
-                            <p>Temp: 74.01 °F</p>
-                        </li>
-                        <li>
-                            <p>Wind: 8.22 MPH</p>
-                        </li>
-                        <li>
-                            <p>Humidity: 22%</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col">
-                    <ul class="card m-1 p-3">
-                        <li>
-                            <h3>9/8/2022</h3>
-                        </li>
-                        <li>
-                            <p>🌧️</p>
-                        </li>
-                        <li>
-                            <p>Temp: 74.01 °F</p>
-                        </li>
-                        <li>
-                            <p>Wind: 8.22 MPH</p>
-                        </li>
-                        <li>
-                            <p>Humidity: 22%</p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            
         </div>
         <!-- end right column -->
 

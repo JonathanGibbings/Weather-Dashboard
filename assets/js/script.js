@@ -20,7 +20,8 @@ var showSearchHistory = function() {};
 
 // passes city name to get lat/long
 var cityToGeoPosit = function(city) {
-    var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&appid=48bd45b2787b6bc230706d9c63aab592";
+    var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q="
+        + city + "&appid=48bd45b2787b6bc230706d9c63aab592";
     fetch(apiUrl)
         .then(function(response) {
             if (response.ok) {
@@ -36,56 +37,26 @@ var cityToGeoPosit = function(city) {
 };
 // passes lat/long to get weather obj
 var getWeather = function(geoPosit, city) {
-    var apiUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + geoPosit[0] + "&lon=" + geoPosit[1] + "&units=imperial&appid=48bd45b2787b6bc230706d9c63aab592";
-    // var apiUrlFiveDay = "http://api.openweathermap.org/data/2.5/forecast?lat=" + geoPosit[0] + "&lon=" + geoPosit[1] + "&appid=48bd45b2787b6bc230706d9c63aab592";
-    // var fiveDayForecast = {};
+    var apiUrl = "https://api.openweathermap.org/data/3.0/onecall?lat="
+        + geoPosit[0] + "&lon=" + geoPosit[1]
+        + "&units=imperial&appid=48bd45b2787b6bc230706d9c63aab592";
     fetch(apiUrl)
         .then(function(response) {
             if (response.ok) {
                 response.json().then(function(data) {
                     console.log(data);
                     createWeatherDash(data, city);
+                    createFiveDay(data);
                 });
             } else {
                 var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("Weather Error Code: " + data.cod);
                 $("#search-form").append(errorEl);
             }
         })
-    // fetch(apiUrlFiveDay)
-    //     .then(function(response) {
-    //         if (response.ok) {
-    //             response.json().then(function(data) {
-    //                 console.log(data);
-    //                 fiveDayForecast = data;
-    //             });
-    //         } else {
-    //             var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("5Day Error Code: " + data.cod);
-    //             $("#search-form").append(errorEl);
-    //         }
-    //     })
 };
 
 // parses weather object into dynamic elements
 var createWeatherDash = function(forecast, city) {
-//     <div class="border border-dark mr-3 p-3">
-//     <h2>Durham (9/3/2022) ☁️</h2>
-//     <ul>
-//         <li>
-//             <p>
-//                 Temp: 74.01 °F
-//             </p>
-//         </li>
-//         <li>
-//             <p>Wind: 8.22 MPH</p>
-//         </li>
-//         <li>
-//             <p>Humidity: 22%</p>
-//         </li>
-//         <li>
-//             <p>UV Index: <span>0.48</span></p>
-//         </li>
-//     </ul>
-// </div>
     // container for dashboard
     var weatherBox = $("<div>")
         .addClass("col-12 row justify-content-start border border-dark mr-3 p-3")
@@ -97,15 +68,13 @@ var createWeatherDash = function(forecast, city) {
     var currIcon = $("<img>")
         .attr("src", "http://openweathermap.org/img/w/" + forecast.current.weather[0].icon + ".png")
         .attr("alt", "Icon for current weather.")
+    var listBox = $("<ul>")
+        .addClass("list-group col-12");
     // current weather info elements
-    var tempEl = $("<p>").text("Temp: " + forecast.current.temp + " °F")
-        .addClass("col-12");
-    var windEl = $("<p>").text("Wind: " + forecast.current.wind_speed + " MPH")
-        .addClass("col-12");
-    var humidityEl = $("<p>").text("Humidity: " + forecast.current.humidity + "%")
-        .addClass("col-12");
-    var uvIndexEl = $("<p>").html("UV Index: <span>" + forecast.current.uvi + "</span>")
-        .addClass("col-12");
+    var tempEl = $("<li>").text("Temp: " + forecast.current.temp + " °F")
+    var windEl = $("<li>").text("Wind: " + forecast.current.wind_speed + " MPH")
+    var humidityEl = $("<li>").text("Humidity: " + forecast.current.humidity + "%")
+    var uvIndexEl = $("<li>").html("UV Index: <span>" + forecast.current.uvi + "</span>")
     // sets color for uv span element
     if (forecast.current.uvi >= 11) {
         uvIndexEl.addClass("uv-purple")
@@ -118,19 +87,73 @@ var createWeatherDash = function(forecast, city) {
     } else {
         uvIndexEl.addClass("uv-green")
     }
-
-
-    weatherBox.append(cityDateEl, currIcon, tempEl, windEl, humidityEl, uvIndexEl);
+    listBox.append(tempEl, windEl, humidityEl, uvIndexEl);
+    weatherBox.append(cityDateEl, currIcon, listBox);
     $("#right-column").append(weatherBox);
-
-
-
-
-
-
 };
 
-var createFiveDay = function(fiveDay) {};
+var createFiveDay = function(forecast) {
+    // <div class="row">
+    //     <h2 class="col-12 p-3">5-Day Forecast:</h2>
+    //     <div class="col">
+    //         <ul class="card m-1 p-3">
+    //             <li>
+    //                 <h3>9/4/2022</h3>
+    //             </li>
+    //             <li>
+    //                 <p>🌧️</p>
+    //             </li>
+    //             <li>
+    //                 <p>Temp: 74.01 °F</p>
+    //             </li>
+    //             <li>
+    //                 <p>Wind: 8.22 MPH</p>
+    //             </li>
+    //             <li>
+    //                 <p>Humidity: 22%</p>
+    //             </li>
+    //         </ul>
+    //     </div>
+    //     <div class="col">
+    //         <ul class="card m-1 p-3">
+    //             <li>
+    //                 <h3>9/5/2022</h3>
+    //             </li>
+    //             <li>
+    //                 <p>🌧️</p>
+    //             </li>
+    //             <li>
+    //                 <p>Temp: 74.01 °F</p>
+    //             </li>
+    //             <li>
+    //                 <p>Wind: 8.22 MPH</p>
+    //             </li>
+    //             <li>
+    //                 <p>Humidity: 22%</p>
+    //             </li>
+    //         </ul>
+    //     </div>
+    // </div>
+    // box to hold the 5 day cards
+    var fiveDayBox = $("<div>")
+        .addClass("row")
+    var titleEl = $("<h2>")
+        .addClass("col-12 p-3")
+        .text("5-Day Forecast:");
+    fiveDayBox.append(titleEl);
+    for (var i = 0; i < 5; i++) {
+        var listBox = $("<ul>")
+            .addClass("list-group col card m-1 p3");
+        var DateEl = $("<h3>")
+            .text(moment.unix(forecast.daily[i].dt).format("M/D/YYYY"))
+        var tempEl = $("<li>").text("Temp: " + forecast.daily[i].temp.day + " °F")
+        var windEl = $("<li>").text("Wind: " + forecast.daily[i].wind_speed + " MPH")
+        var humidityEl = $("<li>").text("Humidity: " + forecast.daily[i].humidity + "%")
+        listBox.append(DateEl, tempEl, windEl, humidityEl);
+        fiveDayBox.append(listBox);
+    }
+    $("#right-column").append(fiveDayBox);
+};
 
 // on submit send city name to lat/long fetch
 $("#search-form").submit(function(event) {
