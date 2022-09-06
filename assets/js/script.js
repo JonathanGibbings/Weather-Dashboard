@@ -26,48 +26,47 @@ var cityToGeoPosit = function(city) {
             if (response.ok) {
                 response.json().then(function(data) {
                     var latLon = [data[0].lat, data[0].lon]
-                    getWeather(latLon);
+                    getWeather(latLon, city);
                 });
             } else {
-                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("Lat/Lon Error Code: " + data.cod);
+                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("Location Error Code: " + data.cod);
                 $("#search-form").append(errorEl);
             }
         })
 };
 // passes lat/long to get weather obj
-var getWeather = function(geoPosit) {
-    var apiUrlCurrentWeather = "https://api.openweathermap.org/data/2.5/weather?lat=" + geoPosit[0] + "&lon=" + geoPosit[1] + "&appid=48bd45b2787b6bc230706d9c63aab592";
-    var apiUrlFiveDay = "http://api.openweathermap.org/data/2.5/forecast?lat=" + geoPosit[0] + "&lon=" + geoPosit[1] + "&appid=48bd45b2787b6bc230706d9c63aab592";
-    var fiveDayForecast = {};
-    fetch(apiUrlCurrentWeather)
-        .then(function(response) {
-            if (response.ok) {
-                response.json().then(function(data) {
-                    console.log(data.name);
-                    // currentWeather = data;
-                    createWeatherDash(data);
-                });
-            } else {
-                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("CurWea Error Code: " + data.cod);
-                $("#search-form").append(errorEl);
-            }
-        })
-    fetch(apiUrlFiveDay)
+var getWeather = function(geoPosit, city) {
+    var apiUrl = "https://api.openweathermap.org/data/3.0/onecall?lat=" + geoPosit[0] + "&lon=" + geoPosit[1] + "&units=imperial&appid=48bd45b2787b6bc230706d9c63aab592";
+    // var apiUrlFiveDay = "http://api.openweathermap.org/data/2.5/forecast?lat=" + geoPosit[0] + "&lon=" + geoPosit[1] + "&appid=48bd45b2787b6bc230706d9c63aab592";
+    // var fiveDayForecast = {};
+    fetch(apiUrl)
         .then(function(response) {
             if (response.ok) {
                 response.json().then(function(data) {
                     console.log(data);
-                    fiveDayForecast = data;
+                    createWeatherDash(data, city);
                 });
             } else {
-                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("5Day Error Code: " + data.cod);
+                var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("Weather Error Code: " + data.cod);
                 $("#search-form").append(errorEl);
             }
         })
+    // fetch(apiUrlFiveDay)
+    //     .then(function(response) {
+    //         if (response.ok) {
+    //             response.json().then(function(data) {
+    //                 console.log(data);
+    //                 fiveDayForecast = data;
+    //             });
+    //         } else {
+    //             var errorEl = $("<p>").addClass("error-notice col-9 bg-danger p-2").text("5Day Error Code: " + data.cod);
+    //             $("#search-form").append(errorEl);
+    //         }
+    //     })
 };
 
 // parses weather object into dynamic elements
-var createWeatherDash = function(current) {
+var createWeatherDash = function(forecast, city) {
 //     <div class="border border-dark mr-3 p-3">
 //     <h2>Durham (9/3/2022) ☁️</h2>
 //     <ul>
@@ -87,10 +86,43 @@ var createWeatherDash = function(current) {
 //         </li>
 //     </ul>
 // </div>
-    var weatherBox = $("<div>").addClass("border border-dark mr-3 p-3")
-    var weatherIcon = $("<img>").html("src='http:..openweathermap.org/img/w/" + current.icon + ".png' alt='Icon for current weather.'>");
-    var cityDateEl = $("<h2>").text(current.name + " (" + moment.unix(current.dt).format("M/D/YYYY") + ") ")
-    $("#right-column").append(cityDateEl, weatherIcon)
+    // container for dashboard
+    var weatherBox = $("<div>")
+        .addClass("col-12 row justify-content-start border border-dark mr-3 p-3")
+        .attr("id", "weather-box")
+    // city and date header element
+    var cityDateEl = $("<h2>")
+        .text(city + " (" + moment.unix(forecast.current.dt).format("M/D/YYYY") + ") ")
+    // icon for current weather
+    var currIcon = $("<img>")
+        .attr("src", "http://openweathermap.org/img/w/" + forecast.current.weather[0].icon + ".png")
+        .attr("alt", "Icon for current weather.")
+    // current weather info elements
+    var tempEl = $("<p>").text("Temp: " + forecast.current.temp + " °F")
+        .addClass("col-12");
+    var windEl = $("<p>").text("Wind: " + forecast.current.wind_speed + " MPH")
+        .addClass("col-12");
+    var humidityEl = $("<p>").text("Humidity: " + forecast.current.humidity + "%")
+        .addClass("col-12");
+    var uvIndexEl = $("<p>").html("UV Index: <span>" + forecast.current.uvi + "</span>")
+        .addClass("col-12");
+    // sets color for uv span element
+    if (forecast.current.uvi >= 11) {
+        uvIndexEl.addClass("uv-purple")
+    } else if (forecast.current.uvi >= 8) {
+        uvIndexEl.addClass("uv-red")
+    } else if (forecast.current.uvi >= 6) {
+        uvIndexEl.addClass("uv-orange")
+    } else if (forecast.current.uvi >= 3) {
+        uvIndexEl.addClass("uv-yellow")
+    } else {
+        uvIndexEl.addClass("uv-green")
+    }
+
+
+    weatherBox.append(cityDateEl, currIcon, tempEl, windEl, humidityEl, uvIndexEl);
+    $("#right-column").append(weatherBox);
+
 
 
 

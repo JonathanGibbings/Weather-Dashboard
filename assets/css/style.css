@@ -21,17 +21,22 @@ h1 {
 }
 
 h2 {
-    font-size: 42px;
+    font-size: 30px;
 }
 
 h3 {
-    font-size: 36px;
+    font-size: 24px;
 }
 
 .search-btn {
     background-color: var(--searchColor);
     border-radius: 10px;
-    font-size: 24px;
+    font-size: 18px;
+}
+
+.search-btn:hover {
+    background-color: var(--color1);
+    border: 2px solid black;
 }
 
 .search-box {
@@ -41,7 +46,39 @@ h3 {
 .city-btn {
     background-color: #bbb;
     border-radius: 10px;
-    font-size: 24px;
+    font-size: 18px;
+}
+
+/* uv index colors */
+.uv-purple span {
+    background-color: purple;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+.uv-red span {
+    background-color: red;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+.uv-orange span {
+    background-color: orange;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+.uv-yellow span {
+    background-color: yellow;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+.uv-green span {
+    background-color: green;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 5px;
 }
 
 /* 5 day forecast cards */
