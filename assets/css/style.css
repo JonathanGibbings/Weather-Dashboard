@@ -12,6 +12,7 @@
     --cardColor: #33475a;
 }
 
+/* jumbotron styles */
 header {
     background-image: linear-gradient(to right, var(--color1), var(--color2));
 }
@@ -28,6 +29,7 @@ h3 {
     font-size: 24px;
 }
 
+/* button styles */
 .search-btn {
     background-color: var(--searchColor);
     border-radius: 10px;
@@ -37,10 +39,6 @@ h3 {
 .search-btn:hover {
     background-color: var(--color1);
     border: 2px solid black;
-}
-
-.search-box {
-    font-size: 24px;
 }
 
 .city-btn {
@@ -54,6 +52,11 @@ h3 {
     border: 2px solid black;
 }
 
+/* input styles */
+.search-box {
+    font-size: 24px;
+}
+
 /* uv index colors */
 .uv-purple span {
     background-color: purple;
@@ -61,24 +64,28 @@ h3 {
     padding: 2px 5px;
     border-radius: 5px;
 }
+
 .uv-red span {
     background-color: red;
     color: white;
     padding: 2px 5px;
     border-radius: 5px;
 }
+
 .uv-orange span {
     background-color: orange;
     color: white;
     padding: 2px 5px;
     border-radius: 5px;
 }
+
 .uv-yellow span {
     background-color: yellow;
     color: black;
     padding: 2px 5px;
     border-radius: 5px;
 }
+
 .uv-green span {
     background-color: green;
     color: white;
@@ -104,6 +111,7 @@ li {
     font-size: 18px;
 }
 
+/* error notice styles */
 .error-notice {
     border-radius: 10px;
 }
