@@ -41,7 +41,7 @@ var saveSearchHistory = function(city) {
 
 // passes city name to get lat/long
 var cityToGeoPosit = function(city) {
-    var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q="
+    var apiUrl = "https://api.openweathermap.org/geo/1.0/direct?q="
         + city + "&appid=48bd45b2787b6bc230706d9c63aab592";
     fetch(apiUrl)
         .then(function(response) {
