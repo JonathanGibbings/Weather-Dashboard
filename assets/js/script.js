@@ -1,7 +1,7 @@
 // TODO
 /* GIVEN a weather dashboard with form inputs
-WHEN I search for a city
-THEN I am presented with current and future conditions for that city and that city is added to the search history
+// WHEN I search for a city
+// THEN I am presented with current and future conditions for that city and that city is added to the search history
 // WHEN I view current weather conditions for that city
 // THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
 // WHEN I view the UV index
@@ -24,7 +24,23 @@ var loadSearchHistory = function() {
         searchHistory.push(savedHistory[i]);
     }
     console.log(searchHistory);
+    createSearchHistBtns();
 };
+
+// creates btn elements for search history
+var createSearchHistBtns = function() {
+    $("#city-btn-area").empty();
+    var ruler = $("<hr>")
+        .addClass("col-9 border-dark m-2");
+    $("#city-btn-area").append(ruler);
+    for (var i = 0; i < searchHistory.length; i++) {
+        var cityBtn = $("<button>")
+            .addClass("col-9 btn city-btn m-2")
+            .text(searchHistory[i]);
+        $("#city-btn-area").append(cityBtn);
+    }
+}
+
 // saves search history to local storage
 var saveSearchHistory = function(city) {
     if (!searchHistory.includes(city)) {
@@ -33,6 +49,7 @@ var saveSearchHistory = function(city) {
         // clears form
         $("input").first().val("");
         localStorage.setItem("citySearchHistory", JSON.stringify(searchHistory));
+        createSearchHistBtns();
     }
 };
 
@@ -44,8 +61,19 @@ var cityToGeoPosit = function(city) {
         .then(function(response) {
             if (response.ok) {
                 response.json().then(function(data) {
-                    var latLon = [data[0].lat, data[0].lon]
-                    getWeather(latLon, city);
+                    // checks if anything was returned
+                    if (data.length === 0) {
+                        var errorEl = $("<p>").addClass("error-notice col-9 bg-danger m-2 p-2").text("Error: City not found");
+                        $("#search-form").append(errorEl);
+                        setTimeout(function() {
+                            $(".error-notice").remove();
+                        }, 3000);
+                    } else {
+                        var latLon = [data[0].lat, data[0].lon];
+                        getWeather(latLon, city);
+                        // saves city name
+                        saveSearchHistory(city);
+                    }
                 });
             } else {
                 var errorEl = $("<p>").addClass("error-notice col-9 bg-danger m-2 p-2").text("Location Error Code: " + data.cod);
@@ -168,8 +196,6 @@ $("#search-form").submit(function(event) {
             cityName[i] = cityName[i][0].toUpperCase() + cityName[i].substr(1).toLowerCase();
         }
         cityName = cityName.join(" ");
-        // saves city name
-        saveSearchHistory(cityName);
         // sends city to get data back
         cityToGeoPosit(cityName);
     } else {
@@ -182,7 +208,10 @@ $("#search-form").submit(function(event) {
 });
 
 // on click send city name from button from searchHistory
-$(".city-btn").on("click", "button", function() {});
+$("#city-btn-area").on("click", "button", function() {
+    var cityName = $(this).text();
+    cityToGeoPosit(cityName);
+});
 
 loadSearchHistory();
 

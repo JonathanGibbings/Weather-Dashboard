@@ -49,6 +49,11 @@ h3 {
     font-size: 18px;
 }
 
+.city-btn:hover {
+    background-color: #777;
+    border: 2px solid black;
+}
+
 /* uv index colors */
 .uv-purple span {
     background-color: purple;
